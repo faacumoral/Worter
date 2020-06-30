@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Worter.DAO\Worter.DAO.csproj" />
+    <ProjectReference Include="..\Worter.Services\Worter.Services.csproj" />
+  </ItemGroup>
+
+</Project>
