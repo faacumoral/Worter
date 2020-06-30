@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FMCW.Common\FMCW.Common.csproj" />
     <ProjectReference Include="..\Worter.DAO\Worter.DAO.csproj" />
-    <ProjectReference Include="..\Worter.Services\Worter.Services.csproj" />
   </ItemGroup>
 
 </Project>

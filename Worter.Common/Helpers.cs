@@ -6,7 +6,6 @@ namespace Worter.Common
 {
     public static class Helpers
     {
-
         public static Environment GetEnvironment()
         {
             var value = System.Environment.GetEnvironmentVariable(CONSTANTS.Keys.ENVIRONMENT);
@@ -30,18 +29,17 @@ namespace Worter.Common
         public static string GetConnectionString()
         {
             var env = GetEnvironment();
-
+            
             switch (env)
             {
                 case Environment.DEVELOPMENT:
-
-                    break;
+                    return "Server=.\\SQLExpress;Database=Worter;Trusted_Connection=True;";
                 case Environment.PRODUCTION:
-
-                    break;
+                    var password_decode = System.Environment.GetEnvironmentVariable(CONSTANTS.Keys.PASSWORD_ENCRYPT);
+                    var encoded_connectionstring = System.Environment.GetEnvironmentVariable(CONSTANTS.Keys.CONNECTION_STRING);
+                    return FMCW.Seguridad.Encriptador.Desencriptar(encoded_connectionstring, password_decode);
             }
-#warning throw exception that connection string is not define
-            return "";
+            throw new ArgumentException($"Not define connection string for '{env.ToString()}' environment.");
         }
 
 

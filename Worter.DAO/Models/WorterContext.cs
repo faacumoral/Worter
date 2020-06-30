@@ -15,35 +15,19 @@ namespace Worter.DAO.Models
         {
         }
 
-        public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Student> Student { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Usuario>(entity =>
+            modelBuilder.Entity<Student>(entity =>
             {
-                entity.HasKey(e => e.IdUsuario);
-
-                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
-
-                entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
+                entity.HasKey(e => e.IdStudent);
 
                 entity.Property(e => e.Password).IsUnicode(false);
 
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.IdUsuarioCreacionNavigation)
-                    .WithMany(p => p.InverseIdUsuarioCreacionNavigation)
-                    .HasForeignKey(d => d.IdUsuarioCreacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UsuarioCreacion");
-
-                entity.HasOne(d => d.IdUsuarioModificacionNavigation)
-                    .WithMany(p => p.InverseIdUsuarioModificacionNavigation)
-                    .HasForeignKey(d => d.IdUsuarioModificacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UsuarioModificacion");
             });
         }
     }

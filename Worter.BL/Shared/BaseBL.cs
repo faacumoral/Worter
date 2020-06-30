@@ -1,9 +1,16 @@
-﻿using Worter.DAO.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Worter.DAO.Models;
 
 namespace Worter.BL.Shared
 {
-    public class BaseBL 
+    public abstract class BaseBL
     {
-        public BaseBL(WorterContext ctx, int idUser) { }
+        protected readonly WorterContext _context;
+        public BaseBL(WorterContext context)
+        {
+            _context = context;
+        }
     }
 }

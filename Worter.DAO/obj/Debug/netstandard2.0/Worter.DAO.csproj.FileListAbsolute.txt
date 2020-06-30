@@ -1,9 +1,0 @@
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\bin\Debug\netstandard2.0\Worter.DAO.deps.json
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\bin\Debug\netstandard2.0\Worter.DAO.dll
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.csprojAssemblyReference.cache
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.AssemblyInfoInputs.cache
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.AssemblyInfo.cs
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\bin\Debug\netstandard2.0\Worter.DAO.pdb
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.csproj.CoreCompileInputs.cache
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.dll
-C:\Users\FacundoMoral\Desktop\Worter\Worter.DAO\obj\Debug\netstandard2.0\Worter.DAO.pdb
