@@ -2,7 +2,7 @@
 
 namespace FMCW.Common.Results
 {
-    public class DTOResult<T> : BaseResult<T, ErrorResult>
+    public class DTOResult<T> : BaseResult<T, ErrorResult>, IBaseErrorResult
         where T: BaseDTO
     {
         public static DTOResult<T> Ok(T ok)

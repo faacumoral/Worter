@@ -2,7 +2,7 @@
 
 namespace FMCW.Common.Results
 {
-    public class BoolResult : BaseResult<bool, ErrorResult>
+    public class BoolResult : BaseResult<bool, ErrorResult>, IBaseErrorResult
     {
         public static BoolResult Ok()
             => new BoolResult

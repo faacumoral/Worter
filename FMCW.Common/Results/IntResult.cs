@@ -2,7 +2,7 @@
 
 namespace FMCW.Common.Results
 {
-    public class IntResult : BaseResult<int, ErrorResult>
+    public class IntResult : BaseResult<int, ErrorResult>, IBaseErrorResult
     {
         public static IntResult Ok(int ok)
             => new IntResult

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FMCW.Common.Results
 {
-    public class ListResult<T> : BaseResult<List<T>, ErrorResult>
+    public class ListResult<T> : BaseResult<List<T>, ErrorResult>, IBaseErrorResult
     {
         public static ListResult<T> Ok(List<T> ok)
             => new ListResult<T>
