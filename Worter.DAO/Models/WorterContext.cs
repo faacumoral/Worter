@@ -15,13 +15,26 @@ namespace Worter.DAO.Models
         {
         }
 
+        public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<Student> Student { get; set; }
+        public virtual DbSet<Word> Word { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Language>(entity =>
+            {
+                entity.HasKey(e => e.IdLanguage)
+                    .HasName("PK__Language__1656D9172765D4AC");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Student>(entity =>
             {
-                entity.HasKey(e => e.IdStudent);
+                entity.HasKey(e => e.IdStudent)
+                    .HasName("PK__Student__61B351045882A987");
 
                 entity.Property(e => e.Password).IsUnicode(false);
 
@@ -29,6 +42,26 @@ namespace Worter.DAO.Models
                     .IsRequired()
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Word>(entity =>
+            {
+                entity.HasKey(e => e.IdWord)
+                    .HasName("PK__Word__2E9FC62CBEC06D11");
+
+                entity.Property(e => e.OriginalMeaning).IsUnicode(false);
+
+                entity.Property(e => e.TranslateMeaning).IsUnicode(false);
+
+                entity.HasOne(d => d.IdLanguageNavigation)
+                    .WithMany(p => p.Word)
+                    .HasForeignKey(d => d.IdLanguage)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Language");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
