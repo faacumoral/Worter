@@ -14,12 +14,12 @@
         </div>
         <div class="row form-row">
             <div class="col-12">
-                <input placeholder="username" class="form-control" @bind="username" />
+                <input placeholder="username" class="form-control" @bind="credentials.Username" />
             </div>
         </div>
         <div class="row form-row">
             <div class="col-12">
-                <input placeholder="password" type="password" class="form-control" @bind="password" />
+                <input placeholder="password" type="password" class="form-control" @bind="credentials.Password" />
             </div>
         </div>
         <div class="row form-row">
@@ -52,20 +52,18 @@
     </div>
 </div>
 @code {
-    private string username;
-    private string password;
     private StringResult loginResponse;
+    private StudentLoginRequest credentials = new StudentLoginRequest();
     private bool requestSent = false;
 
     private async Task DoLogin()
     {
         loginResponse = null;
 
-        var user = new StudentLoginRequest { Username = username, Password = password };
-        var apiRequest = new PostRequest<StudentLoginRequest>("Login/Student", user, false);
+        var apiRequest = Request.BuildPost("Login/Student", credentials, false);
 
         requestSent = true;
-        loginResponse = await APIClient.Post<StudentLoginRequest, StringResult>(apiRequest);
+        loginResponse = await APIClient.Send<StringResult>(apiRequest);
 
         requestSent = false;
 

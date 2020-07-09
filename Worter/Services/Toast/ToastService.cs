@@ -15,6 +15,16 @@ namespace Worter.Services.Toast
             StartCountdown();
         }
 
+        public void ShowError(string message)
+        {
+            ShowToast(message, ToastLevel.Error);
+        }
+
+        public void ShowSucces(string message)
+        {
+            ShowToast(message, ToastLevel.Success);
+        }
+
         private void StartCountdown()
         {
             SetCountdown();

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Linq;
 using Worter.API.Controllers.Shared;
 using Worter.BL;
 using Worter.DAO.Models;
@@ -17,10 +19,11 @@ namespace Worter.API.Controllers
             this.wordBl = new WordBL(context, configuration);
         }
 
-        [Authorize]
         [Route("Add")]
         [HttpPost]
         public IntResult Add([FromBody]WordDTO word)
-            => wordBl.Add(word);
+        {
+            return wordBl.Add(word, UserId);
+        }
     }
 }

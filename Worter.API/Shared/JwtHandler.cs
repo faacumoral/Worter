@@ -20,7 +20,7 @@ namespace Worter.API.Shared
             // CREAMOS LOS CLAIMS //
             var _Claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.NameId, id)
+                    new Claim("UserId", id)
                 };
 
             // CREAMOS EL PAYLOAD //

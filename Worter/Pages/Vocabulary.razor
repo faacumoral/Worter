@@ -1,4 +1,4 @@
-﻿@page "/dictionary"
+﻿@page "/vocabulary"
 @inject APIClient APIClient
 @inject ToastService toastService
 @using Worter.DTO.Language
@@ -45,35 +45,44 @@
     private async void AddWord()
     {
         if (string.IsNullOrEmpty(newWord.OriginalMeaning))
-        { 
-            toastService.ShowToast("Complete original meaning field", ToastLevel.Error);
+        {
+            toastService.ShowError("Complete original meaning field");
             return;
         }
 
         if (string.IsNullOrEmpty(newWord.TranslateMeaning))
-        { 
-            toastService.ShowToast("Complete translate meaning field", ToastLevel.Error);
+        {
+            toastService.ShowError("Complete translate meaning field");
             return;
         }
 
         if (newWord.IdLanguage == 0)
-        { 
-            toastService.ShowToast("Pick a language", ToastLevel.Error);
+        {
+            toastService.ShowError("Pick a language");
             return;
         }
 
-        var apiRequest = new PostRequest<WordDTO>("Word/Add", newWord);
+        var apiRequest = Request.BuildPost("Word/Add", newWord);
 
-        var addRequest= await APIClient.Post<WordDTO, IntResult>(apiRequest);
+        var addRequest= await APIClient.Send<IntResult>(apiRequest);
 
-        Console.WriteLine(addRequest.ResultOk);
+        if (addRequest.Success)
+        {
+            toastService.ShowSucces("New word added correctly");
+            newWord = new WordDTO();
+            StateHasChanged();
+        }
+        else
+        {
+            toastService.ShowError("An error has ocurred");
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var apiRequest = new GetRequest("Language/GetAll");
+        var apiRequest = Request.BuildGet("Language/GetAll");
 
-        var response = await APIClient.Get<ListResult<Worter.DTO.Language.LanguageDTO>>(apiRequest);
+        var response = await APIClient.Send<ListResult<Worter.DTO.Language.LanguageDTO>>(apiRequest);
 
         if (response.Success)
         {

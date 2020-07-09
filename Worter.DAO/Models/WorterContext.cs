@@ -19,6 +19,7 @@ namespace Worter.DAO.Models
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<Word> Word { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Language>(entity =>
@@ -57,6 +58,12 @@ namespace Worter.DAO.Models
                     .HasForeignKey(d => d.IdLanguage)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Language");
+
+                entity.HasOne(d => d.IdStudentNavigation)
+                    .WithMany(p => p.Word)
+                    .HasForeignKey(d => d.IdStudent)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Word_Student");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -13,13 +13,14 @@ namespace Worter.BL
     {
         public WordBL(WorterContext context, IConfiguration configuration) : base(context, configuration) { }
 
-        public IntResult Add(WordDTO wordDto)
+        public IntResult Add(WordDTO wordDto, int userId)
         {
             var word = new Word
             { 
                 IdLanguage = wordDto.IdLanguage,
                 OriginalMeaning = wordDto.OriginalMeaning,
-                TranslateMeaning = wordDto.TranslateMeaning
+                TranslateMeaning = wordDto.TranslateMeaning,
+                IdStudent = userId
             };
             context.Word.Add(word);
             context.SaveChanges();

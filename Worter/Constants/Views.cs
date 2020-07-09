@@ -7,7 +7,7 @@
             public const string INDEX = "/";
 
             public const string STUDENTS_LOGIN = "/students-login";
-            public const string DICTIONARY = "/dictionary";
+            public const string VOCABULARY = "/vocabulary";
 
         }
     }
