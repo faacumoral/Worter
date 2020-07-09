@@ -1,6 +1,5 @@
 ﻿using FMCW.Common.Results;
 using Microsoft.AspNetCore.Mvc;
-using Worter.API.Controllers.Shared;
 using Worter.DTO.Login;
 using Worter.BL;
 using Worter.DAO.Models;
@@ -10,11 +9,13 @@ using Worter.API.Shared;
 
 namespace Worter.API.Controllers
 {
-    public class LoginController : AppController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LoginController : ControllerBase
     {
         private readonly StudentBL studentBl;
 
-        private readonly IConfiguration configuration;
+        protected readonly IConfiguration configuration;
 
         public LoginController(WorterContext context, IConfiguration configuration)
         {

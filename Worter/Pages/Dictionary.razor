@@ -1,0 +1,88 @@
+﻿@page "/dictionary"
+@inject APIClient APIClient
+@inject ToastService toastService
+@using Worter.DTO.Language
+
+<div class="row form-row">
+    <div class="col-lg-2 col-sm-4">Languages:</div>
+    <div class="col-lg-4 col-sm-8">
+        <select class="form-control" @bind="newWord.IdLanguage">
+            <option value="0"></option>
+            @foreach (var lang in languages)
+            {
+                <option value="@lang.IdLanguage">@lang.Name</option>
+            }
+        </select>
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-lg-2 col-sm 4">
+        Original meaning:
+    </div>
+    <div class="col-lg-4 col-sm-8">
+         <input class="form-control" @bind="newWord.OriginalMeaning" />
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-lg-2 col-sm 4">
+        Translate meaning:
+    </div>
+    <div class="col-lg-4 col-sm-8">
+        <input class="form-control" @bind="newWord.TranslateMeaning" />
+    </div>
+</div>
+
+
+<button class="btn btn-success" @onclick="AddWord">Add new</button>
+
+@code {
+
+    private WordDTO newWord = new WordDTO();
+    private List<Worter.DTO.Language.LanguageDTO> languages = new List<DTO.Language.LanguageDTO>();
+
+    private async void AddWord()
+    {
+        if (string.IsNullOrEmpty(newWord.OriginalMeaning))
+        { 
+            toastService.ShowToast("Complete original meaning field", ToastLevel.Error);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(newWord.TranslateMeaning))
+        { 
+            toastService.ShowToast("Complete translate meaning field", ToastLevel.Error);
+            return;
+        }
+
+        if (newWord.IdLanguage == 0)
+        { 
+            toastService.ShowToast("Pick a language", ToastLevel.Error);
+            return;
+        }
+
+        var apiRequest = new PostRequest<WordDTO>("Word/Add", newWord);
+
+        var addRequest= await APIClient.Post<WordDTO, IntResult>(apiRequest);
+
+        Console.WriteLine(addRequest.ResultOk);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var apiRequest = new GetRequest("Language/GetAll");
+
+        var response = await APIClient.Get<ListResult<Worter.DTO.Language.LanguageDTO>>(apiRequest);
+
+        if (response.Success)
+        {
+            languages = response.ResultOk;
+        }
+        else
+        {
+            toastService.ShowToast(response.ResultError.FriendlyErrorMessage, ToastLevel.Error);
+        }
+    }
+
+}

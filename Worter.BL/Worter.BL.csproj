@@ -9,6 +9,7 @@
     <ProjectReference Include="..\FMCW.Seguridad.Encriptador\FMCW.Seguridad.Encriptador.csproj" />
     <ProjectReference Include="..\Worter.Common\Worter.Common.csproj" />
     <ProjectReference Include="..\Worter.DAO\Worter.DAO.csproj" />
+    <ProjectReference Include="..\Worter.DTO\Worter.DTO.csproj" />
   </ItemGroup>
 
 </Project>

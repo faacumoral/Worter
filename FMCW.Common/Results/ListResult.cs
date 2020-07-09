@@ -21,5 +21,12 @@ namespace FMCW.Common.Results
                Success = false
            };
 
+        public static implicit operator ListResult<T>(List<T> t)
+          => new ListResult<T>
+          {
+              ResultOk = t,
+              ResultOperation = ResultOperation.Ok,
+              Success = true
+          };
     }
 }

@@ -24,7 +24,7 @@ namespace Worter.HTTP
             this.sessionStorage = sessionStorage;
         }
 
-        public async Task<Tresult> Post<Tsend, Tresult>(APIRequest<Tsend> request)
+        public async Task<Tresult> Post<Tsend, Tresult>(PostRequest<Tsend> request)
             where Tresult : IBaseErrorResult, new()
         {
             var jwtToken = await sessionStorage.GetStringAsync(Constants.JWT_TOKEN);
@@ -49,6 +49,40 @@ namespace Worter.HTTP
             {
                 requestMessage.Content = JsonContent.Create(request.Parameter);
             }
+
+            if (request.CheckAuth)
+            {
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            }
+
+            var response = await client.SendAsync(requestMessage);
+            // var responseStatusCode = response.StatusCode; 
+            return await response.Content.ReadFromJsonAsync<Tresult>();
+        }
+
+
+
+
+        public async Task<Tresult> Get<Tresult>(GetRequest request)
+            where Tresult : IBaseErrorResult, new()
+        {
+            var jwtToken = await sessionStorage.GetStringAsync(Constants.JWT_TOKEN);
+
+            if (string.IsNullOrEmpty(jwtToken) && request.CheckAuth)
+            {
+                return new Tresult()
+                {
+                    ResultError = ErrorResult.Build("JWT cannot be blank"),
+                    Success = false,
+                    ResultOperation = ResultOperation.Unauthorized
+                };
+            }
+
+            var requestMessage = new HttpRequestMessage()
+            {
+                Method = new HttpMethod("GET"),
+                RequestUri = new Uri(client.BaseAddress.OriginalString + request.Url)
+            };
 
             if (request.CheckAuth)
             {

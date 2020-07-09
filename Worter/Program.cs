@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 using Blazored.SessionStorage;
 using Worter.HTTP;
+using Worter.Services;
+using Worter.Services.Toast;
 
 namespace Worter
 {
@@ -20,7 +22,7 @@ namespace Worter
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            //builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["ApiUrl"]) });
+            builder.Services.AddScoped<ToastService>();
 
             builder.Services.AddHttpClient<APIClient>(
                 client => client.BaseAddress = new Uri(builder.Configuration["ApiUrl"]));

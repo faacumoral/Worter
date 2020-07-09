@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worter.BL", "Worter.BL\Wort
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMCW.Common", "FMCW.Common\FMCW.Common.csproj", "{58FFE47F-2C32-4AF5-9572-60C35EED7782}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worter.DTO", "Worter.DTO\Worter.DTO.csproj", "{28907EDE-9A2F-4A71-B1CA-4B27A1497A11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Worter.DTO", "Worter.DTO\Worter.DTO.csproj", "{28907EDE-9A2F-4A71-B1CA-4B27A1497A11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

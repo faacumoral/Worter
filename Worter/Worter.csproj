@@ -19,9 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Watch Remove="Shared\Pages\Dictionary.razor" />
-    <Watch Remove="Shared\Pages\Login\Students.razor" />
+    <Watch Remove="Properties\Pages\Dictionary.razor" />
+    <Watch Remove="Properties\Pages\Login\Students.razor" />
     <Watch Remove="Shared\EmptyLayout.razor" />
+    <Watch Remove="Shared\InputForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Shared\Toast.razor" />
   </ItemGroup>
 
   <ItemGroup>
