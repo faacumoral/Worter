@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Worter.Common;
 using Worter.DAO.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -65,7 +56,12 @@ namespace Worter.API
                     };
                 });
 
-            services.AddDbContext<WorterContext>(options => options.UseSqlServer(Configuration.GetConnectionString()));
+            services.AddDbContext<WorterContext>(
+                options => { 
+                    options.UseSqlServer(Configuration.GetConnectionString()); 
+                    
+                }) ;
+
             services.AddControllers()
                 .AddNewtonsoftJson(
                 o =>

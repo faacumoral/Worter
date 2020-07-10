@@ -22,8 +22,10 @@
     <Watch Remove="Pages\Vocabulary.razor" />
     <Watch Remove="Properties\Pages\Dictionary.razor" />
     <Watch Remove="Properties\Pages\Login\Students.razor" />
+    <Watch Remove="Shared\Dropdown.razor" />
     <Watch Remove="Shared\EmptyLayout.razor" />
     <Watch Remove="Shared\InputForm.razor" />
+    <Watch Remove="Shared\Spinner.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FMCW.Common\FMCW.Common.csproj" />
+    <ProjectReference Include="..\Worter.Common\Worter.Common.csproj" />
     <ProjectReference Include="..\Worter.DTO\Worter.DTO.csproj" />
   </ItemGroup>
 

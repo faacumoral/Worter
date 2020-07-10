@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FMCW.Common\FMCW.Common.csproj" />
+    <ProjectReference Include="..\Worter.Common\Worter.Common.csproj" />
   </ItemGroup>
 
 </Project>

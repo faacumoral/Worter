@@ -16,6 +16,7 @@ namespace Worter.API.Controllers
         private readonly WordBL wordBl;
         public WordController(WorterContext context, IConfiguration configuration) : base(context, configuration)
         {
+            context.ChangeTracker.AutoDetectChangesEnabled = false;
             this.wordBl = new WordBL(context, configuration);
         }
 
@@ -25,5 +26,11 @@ namespace Worter.API.Controllers
         {
             return wordBl.Add(word, UserId);
         }
+
+        [Route("Get")]
+        [HttpGet]
+        public ListResult<WordDTO> Get([FromQuery]WordFilterDTO filters)
+            => wordBl.Get(filters, UserId);
+
     }
 }

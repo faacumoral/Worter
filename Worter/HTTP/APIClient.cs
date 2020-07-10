@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using Blazored.SessionStorage;
 using Worter.Models;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Components;
 
 namespace Worter.HTTP
 {
@@ -18,10 +19,16 @@ namespace Worter.HTTP
 
         private readonly ISessionStorageService sessionStorage;
 
-        public APIClient(HttpClient client, ISessionStorageService sessionStorage)
+        private readonly NavigationManager navigationManager;
+
+        public APIClient(
+            HttpClient client, 
+            ISessionStorageService sessionStorage,
+            NavigationManager navigationManager)
         {
             this.client = client;
             this.sessionStorage = sessionStorage;
+            this.navigationManager = navigationManager;
         }
 
         public async Task<Tresult> Send<Tresult>(Request request)
@@ -29,8 +36,11 @@ namespace Worter.HTTP
         {
             var jwtToken = await sessionStorage.GetStringAsync(Constants.JWT_TOKEN);
 
+            // TODO add expiration validation too
             if (string.IsNullOrEmpty(jwtToken) && request.CheckAuth)
             {
+                // TODO save state
+                navigationManager.GoLogin();
                 return new Tresult()
                 {
                     ResultError = ErrorResult.Build("JWT cannot be blank"),

@@ -5,6 +5,7 @@
         Ok,
         Unauthorized,
         Warning,
-        Error
+        Error,
+        RegisterAlreadyAdd
     }
 }

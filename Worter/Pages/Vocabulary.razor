@@ -1,18 +1,13 @@
 ﻿@page "/vocabulary"
-@inject APIClient APIClient
-@inject ToastService toastService
-@using Worter.DTO.Language
+@inherits VocabularyBase
 
 <div class="row form-row">
     <div class="col-lg-2 col-sm-4">Languages:</div>
-    <div class="col-lg-4 col-sm-8">
-        <select class="form-control" @bind="newWord.IdLanguage">
-            <option value="0"></option>
-            @foreach (var lang in languages)
-            {
-                <option value="@lang.IdLanguage">@lang.Name</option>
-            }
-        </select>
+    <div class="col-lg-10 col-sm-8">
+        <Dropdown DropdownItems="languages"
+                  AddEmpty="true"
+                  OnChange="(id) => newWord.IdLanguage = id"
+                  Disable="requestSent" />
     </div>
 </div>
 
@@ -20,8 +15,8 @@
     <div class="col-lg-2 col-sm 4">
         Original meaning:
     </div>
-    <div class="col-lg-4 col-sm-8">
-         <input class="form-control" @bind="newWord.OriginalMeaning" />
+    <div class="col-lg-10 col-sm-8">
+        <input class="form-control" @bind="newWord.OriginalMeaning" disabled="@requestSent" />
     </div>
 </div>
 
@@ -29,69 +24,75 @@
     <div class="col-lg-2 col-sm 4">
         Translate meaning:
     </div>
-    <div class="col-lg-4 col-sm-8">
-        <input class="form-control" @bind="newWord.TranslateMeaning" />
+    <div class="col-lg-10 col-sm-8">
+        <input class="form-control" @bind="newWord.TranslateMeaning" disabled="@requestSent" />
+    </div>
+</div>
+
+<div class="row form-row">
+    <div class="col-12">
+        <button class="btn btn-success" @onclick="AddWord" disabled="@requestSent">Add new</button>
+        <Spinner Show="requestSent"></Spinner>
     </div>
 </div>
 
 
-<button class="btn btn-success" @onclick="AddWord">Add new</button>
 
-@code {
+<hr />
 
-    private WordDTO newWord = new WordDTO();
-    private List<Worter.DTO.Language.LanguageDTO> languages = new List<DTO.Language.LanguageDTO>();
+<div class="row form-row">
+    <div class="col-lg-2 col-sm 4">
+        Filter
+    </div>
+    <div class="col-lg-10 col-sm-8">
+        <input class="form-control" @bind="filters.Filter" disabled="@requestGetSent" />
+    </div>
+</div>
 
-    private async void AddWord()
-    {
-        if (string.IsNullOrEmpty(newWord.OriginalMeaning))
-        {
-            toastService.ShowError("Complete original meaning field");
-            return;
-        }
 
-        if (string.IsNullOrEmpty(newWord.TranslateMeaning))
-        {
-            toastService.ShowError("Complete translate meaning field");
-            return;
-        }
+<div class="row form-row">
+    <div class="col-lg-2 col-sm 4">
+        Language
+    </div>
+    <div class="col-lg-10 col-sm-8">
+        <Dropdown DropdownItems="languages"
+                  AddEmpty="true"
+                  OnChange="(id) => filters.IdLanguage = id"
+                  Disable="requestGetSent" />
+    </div>
+</div>
+<div class="row form-row">
+    <div class="row form-row">
+        <div class="col-12">
+            <button class="btn btn-success" @onclick="GetWords" disabled="@requestGetSent">Search</button>
+        </div>
+    </div>
+</div>
 
-        if (newWord.IdLanguage == 0)
-        {
-            toastService.ShowError("Pick a language");
-            return;
-        }
-
-        var apiRequest = Request.BuildPost("Word/Add", newWord);
-
-        var addRequest= await APIClient.Send<IntResult>(apiRequest);
-
-        if (addRequest.Success)
-        {
-            toastService.ShowSucces("New word added correctly");
-            newWord = new WordDTO();
-            StateHasChanged();
-        }
-        else
-        {
-            toastService.ShowError("An error has ocurred");
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var apiRequest = Request.BuildGet("Language/GetAll");
-
-        var response = await APIClient.Send<ListResult<Worter.DTO.Language.LanguageDTO>>(apiRequest);
-
-        if (response.Success)
-        {
-            languages = response.ResultOk;
-        }
-        else
-        {
-            toastService.ShowToast(response.ResultError.FriendlyErrorMessage, ToastLevel.Error);
-        }
-    }
-
+<Spinner Show="requestGetSent"></Spinner>
+@if (words != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Original meaning</th>
+                <th>Translate meaning</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var word in words)
+            {
+                <tr>
+                    <td>@word.OriginalMeaning</td>
+                    <td>@word.TranslateMeaning</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteTranslate(word.IdTranslate)">
+                            Delete
+                        </button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
+

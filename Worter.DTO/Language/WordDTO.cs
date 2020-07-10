@@ -4,8 +4,24 @@ namespace Worter.DTO.Language
 {
     public class WordDTO : BaseDTO
     {
-        public string OriginalMeaning { get; set; }
-        public string TranslateMeaning { get; set; }
+        private string translateMeaning;
+        private string originalMeaning;
+
+        public int IdWord { get; set; }
+        public int IdTranslate { get; set; }
         public int IdLanguage { get; set; }
+
+        public string OriginalMeaning 
+        {   
+            get => originalMeaning?.Trim(); 
+            set => originalMeaning = value?.Trim(); 
+        }
+
+        public string TranslateMeaning
+        {
+            get => translateMeaning?.Trim();
+            set => translateMeaning = value?.Trim();
+        }
+
     }
 }

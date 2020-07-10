@@ -20,6 +20,11 @@ namespace Worter.Services.Toast
             ShowToast(message, ToastLevel.Error);
         }
 
+        public void ShowWarning(string message)
+        {
+            ShowToast(message, ToastLevel.Warning);
+        }
+
         public void ShowSucces(string message)
         {
             ShowToast(message, ToastLevel.Success);

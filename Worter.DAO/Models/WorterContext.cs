@@ -17,9 +17,9 @@ namespace Worter.DAO.Models
 
         public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<Student> Student { get; set; }
+        public virtual DbSet<Translation> Translation { get; set; }
         public virtual DbSet<Word> Word { get; set; }
-
-
+ 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Language>(entity =>
@@ -44,14 +44,26 @@ namespace Worter.DAO.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Translation>(entity =>
+            {
+                entity.HasKey(e => e.IdTranslation)
+                    .HasName("PK__Translat__4DAFC6B3905B84ED");
+
+                entity.Property(e => e.Translate).IsUnicode(false);
+
+                entity.HasOne(d => d.IdWordNavigation)
+                    .WithMany(p => p.Translation)
+                    .HasForeignKey(d => d.IdWord)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Translation_Word");
+            });
+
             modelBuilder.Entity<Word>(entity =>
             {
                 entity.HasKey(e => e.IdWord)
                     .HasName("PK__Word__2E9FC62CBEC06D11");
 
-                entity.Property(e => e.OriginalMeaning).IsUnicode(false);
-
-                entity.Property(e => e.TranslateMeaning).IsUnicode(false);
+                entity.Property(e => e.Meaning).IsUnicode(false);
 
                 entity.HasOne(d => d.IdLanguageNavigation)
                     .WithMany(p => p.Word)
