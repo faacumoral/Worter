@@ -14,34 +14,34 @@ namespace Worter.Pages
         [Inject] APIClient APIClient { get; set; }
         [Inject] ToastService toastService { get; set; }
 
-        protected WordDTO newWord = new WordDTO();
+        protected TranslateDTO newTranslate = new TranslateDTO();
         protected List<LanguageDTO> languages = new List<LanguageDTO>();
         protected WordFilterDTO filters = new WordFilterDTO();
-        protected List<WordDTO> words = null;
+        protected List<TranslateDTO> translates = null;
         protected bool requestSent = false;
         protected bool requestGetSent = false;
 
         protected async void AddWord()
         {
-            if (string.IsNullOrEmpty(newWord.OriginalMeaning))
+            if (string.IsNullOrEmpty(newTranslate.OriginalMeaning))
             {
                 toastService.ShowError("Complete original meaning field");
                 return;
             }
 
-            if (string.IsNullOrEmpty(newWord.TranslateMeaning))
+            if (string.IsNullOrEmpty(newTranslate.TranslateMeaning))
             {
                 toastService.ShowError("Complete translate meaning field");
                 return;
             }
 
-            if (newWord.IdLanguage == 0)
+            if (newTranslate.IdLanguage == 0)
             {
                 toastService.ShowError("Pick a language");
                 return;
             }
 
-            var apiRequest = Request.BuildPost("Word/Add", newWord);
+            var apiRequest = Request.BuildPost("Word/AddTranslate", newTranslate);
             requestSent = true;
             var addRequest = await APIClient.Send<IntResult>(apiRequest);
             requestSent = false;
@@ -57,8 +57,8 @@ namespace Worter.Pages
                     toastService.ShowSucces("New word added correctly");
                 }
 
-                newWord.OriginalMeaning = "";
-                newWord.TranslateMeaning = "";
+                newTranslate.OriginalMeaning = "";
+                newTranslate.TranslateMeaning = "";
                 StateHasChanged();
             }
             else
@@ -80,9 +80,22 @@ namespace Worter.Pages
             }
         }
 
-        protected async Task DeleteTranslate(int idTranslate)
+        protected async Task DeleteTranslate(TranslateDTO translate)
         {
-            Console.WriteLine(idTranslate);
+            var apiRequest = Request.BuildPost("Word/DeleteTranslate", translate.IdTranslate);
+            requestGetSent = true;
+            var deleteRequest = await APIClient.Send<BoolResult>(apiRequest);
+            requestGetSent = false;
+            Console.WriteLine(deleteRequest.Success);
+            Console.WriteLine(deleteRequest.ResultOk);
+            if (deleteRequest.Success && deleteRequest.ResultOk)
+            {
+                translates.Remove(translate);
+            }
+            else
+            {
+                toastService.ShowError(deleteRequest.ResultError?.FriendlyErrorMessage);
+            }
         }
 
         protected async Task GetWords()
@@ -102,11 +115,11 @@ namespace Worter.Pages
             var url = $"Word/Get?IdLanguage={filters.IdLanguage}&Filter={filters.Filter}";
             var request = Request.BuildGet(url);
             requestGetSent = true;
-            var response = await APIClient.Send<ListResult<WordDTO>>(request);
+            var response = await APIClient.Send<ListResult<TranslateDTO>>(request);
             requestGetSent = false;
             if (response.Success)
             {
-                words = response.ResultOk;
+                translates = response.ResultOk;
             }
             else
             {

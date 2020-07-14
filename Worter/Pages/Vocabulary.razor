@@ -6,7 +6,7 @@
     <div class="col-lg-10 col-sm-8">
         <Dropdown DropdownItems="languages"
                   AddEmpty="true"
-                  OnChange="(id) => newWord.IdLanguage = id"
+                  OnChange="(id) => newTranslate.IdLanguage = id"
                   Disable="requestSent" />
     </div>
 </div>
@@ -16,7 +16,7 @@
         Original meaning:
     </div>
     <div class="col-lg-10 col-sm-8">
-        <input class="form-control" @bind="newWord.OriginalMeaning" disabled="@requestSent" />
+        <input class="form-control" @bind="newTranslate.OriginalMeaning" disabled="@requestSent" />
     </div>
 </div>
 
@@ -25,7 +25,7 @@
         Translate meaning:
     </div>
     <div class="col-lg-10 col-sm-8">
-        <input class="form-control" @bind="newWord.TranslateMeaning" disabled="@requestSent" />
+        <input class="form-control" @bind="newTranslate.TranslateMeaning" disabled="@requestSent" />
     </div>
 </div>
 
@@ -70,29 +70,40 @@
 </div>
 
 <Spinner Show="requestGetSent"></Spinner>
-@if (words != null)
+
+@if (translates != null)
 {
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Original meaning</th>
+            <th>Translate meaning</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (translates.Count == 0)
+        {
             <tr>
-                <th>Original meaning</th>
-                <th>Translate meaning</th>
-                <th></th>
+                <label>No results found</label>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var word in words)
+        }
+        else
+        {
+            @foreach (var translate in translates)
             {
                 <tr>
-                    <td>@word.OriginalMeaning</td>
-                    <td>@word.TranslateMeaning</td>
+                    <td>@translate.OriginalMeaning</td>
+                    <td>@translate.TranslateMeaning</td>
                     <td>
-                        <button class="btn btn-danger" @onclick="() => DeleteTranslate(word.IdTranslate)">
+                        <button class="btn btn-danger" @onclick="() => DeleteTranslate(translate)">
                             Delete
-                        </button></td>
+                        </button>
+                    </td>
                 </tr>
             }
-        </tbody>
+        }
+    </tbody>
     </table>
 }
 

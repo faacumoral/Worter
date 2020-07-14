@@ -20,17 +20,28 @@ namespace Worter.API.Controllers
             this.wordBl = new WordBL(context, configuration);
         }
 
-        [Route("Add")]
+        #region POST
+        [Route("AddTranslate")]
         [HttpPost]
-        public IntResult Add([FromBody]WordDTO word)
-        {
-            return wordBl.Add(word, UserId);
-        }
+        public IntResult AddTranslate([FromBody]TranslateDTO word)
+            => wordBl.Add(word, UserId);
 
+        [Route("DeleteTranslate")]
+        [HttpPost]
+        public BoolResult DeleteTranslate([FromBody]int IdTranslate)
+           => wordBl.DeleteTranslate(IdTranslate);
+        #endregion
+
+        #region MyRegion
         [Route("Get")]
         [HttpGet]
-        public ListResult<WordDTO> Get([FromQuery]WordFilterDTO filters)
+        public ListResult<TranslateDTO> Get([FromQuery]WordFilterDTO filters)
             => wordBl.Get(filters, UserId);
 
+        [Route("GetLearns")]
+        [HttpGet]
+        public ListResult<LearnDTO> GetLearns([FromQuery] int IdLanguage)
+            => wordBl.GetLearns(IdLanguage, UserId);
+        #endregion
     }
 }

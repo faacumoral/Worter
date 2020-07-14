@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Watch Remove="Pages\Learn.razor" />
     <Watch Remove="Pages\Vocabulary.razor" />
     <Watch Remove="Properties\Pages\Dictionary.razor" />
     <Watch Remove="Properties\Pages\Login\Students.razor" />

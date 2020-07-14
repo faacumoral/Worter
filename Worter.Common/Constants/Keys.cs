@@ -6,6 +6,8 @@ namespace Worter.Common.Constants
 {
     public static partial class CONSTANTS
     {
+        public const int WORDS_TO_RETURN = 5;
+
         public static class Keys
         {
             #region ENVIRONMENT

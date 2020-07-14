@@ -8,6 +8,7 @@
 
             public const string STUDENTS_LOGIN = "/students-login";
             public const string VOCABULARY = "/vocabulary";
+            public const string LEARN = "/learn";
 
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Worter.DTO.Language
 {
-    public class WordDTO : BaseDTO
+    public class TranslateDTO : BaseDTO
     {
         private string translateMeaning;
         private string originalMeaning;
