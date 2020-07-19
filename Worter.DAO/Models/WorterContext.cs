@@ -19,7 +19,7 @@ namespace Worter.DAO.Models
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<Translation> Translation { get; set; }
         public virtual DbSet<Word> Word { get; set; }
- 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Language>(entity =>

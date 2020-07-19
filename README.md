@@ -4,4 +4,4 @@ CONNECTION_STRING: connection string encriptado
 ENVIRONMENT: DEVELOPMENT|PRODUCTION
 
 Scaffold:
-Scaffold-DbContext "Server=.\SQLExpress;Database=Worter;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Scaffold-DbContext "Server=.\SQLExpress;Database=Worter;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f

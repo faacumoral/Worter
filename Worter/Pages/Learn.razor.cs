@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Worter.Common;
 using Worter.DTO.Language;
 using Worter.HTTP;
 using Worter.Services.Toast;
@@ -16,11 +17,13 @@ namespace Worter.Pages
         [Inject] APIClient APIClient { get; set; }
         [Inject] ToastService toastService { get; set; }
 
-        protected List<AnswerDTO> userAnswers = new List<AnswerDTO>();
-        protected int learnIndex = 0;
         protected int idLanguage = 0;
         protected bool languageSelected = false;
+
         protected List<LanguageDTO> languages = new List<LanguageDTO>();
+
+        protected LearnDTO learn = new LearnDTO();
+        protected List<AnswerDTO> userAnswers = new List<AnswerDTO>();
         protected List<LearnDTO> learns = new List<LearnDTO>();
 
         protected async Task LoadLanguages()
@@ -50,14 +53,13 @@ namespace Worter.Pages
 
         protected async Task StartLearn()
         {
-            var url = $"Word/GetLearns?IdLanguage={idLanguage}";
+            var url = $"Learn/GetInitialLearns?IdLanguage={idLanguage}";
             var apiRequest = Request.BuildGet(url);
             var response = await APIClient.Send<ListResult<LearnDTO>>(apiRequest);
             if (response.Success)
             {
                 learns = response.ResultOk;
-                learnIndex = 0;
-                ShowWord();
+                LoadNewWord();
             }
             else
             {
@@ -65,44 +67,80 @@ namespace Worter.Pages
             }
         }
 
-        protected void ShowWord()
+        protected void LoadNewWord()
         {
-            userAnswers = new List<AnswerDTO>();
-            for (int i = 0; i < learns[learnIndex].Translations.Count; i++)
+            learn = learns.GetRandom();
+            learn.UserAnswers = new List<AnswerDTO>();
+            // add all possible answers
+            for (int i = 0; i < learn.Translations.Count; i++)
             {
-                userAnswers.Add(new AnswerDTO
+                learn.UserAnswers.Add(new AnswerDTO
                 {
                     IsCorrect = false,
-                    UserAnswer = ""
+                    UserAnswer = "",
+                    IdTranslate = 0
                 });
             }
         }
 
         protected void CheckAnswer(AnswerDTO answer)
         {
-            var actualLearn = learns[learnIndex];
-            if (actualLearn.Translations.Contains(answer.UserAnswer) &&
-                userAnswers.Count(a => answer.UserAnswer == a.UserAnswer) == 1)
+            // check if its correct
+            var correctAnswer = learn.Translations.FirstOrDefault(t => t.Answer == answer.UserAnswer);
+            // and check if is not already answered
+            var isOnlyOneTime = learn.UserAnswers.Count(a => answer.UserAnswer == a.UserAnswer) == 1;
+            if (correctAnswer != null && isOnlyOneTime)
             {
+                answer.IdTranslate = correctAnswer.IdTranslate;
                 answer.IsCorrect = true;
-            }
-            if (userAnswers.All(u => u.IsCorrect))
-            {
-                Console.WriteLine("LISTO PAPA LA QUE SIGUE");
             }
         }
 
-        protected void Next()
+        #region Next and dont know buttons
+        protected async Task DontKnow()
         {
-            learns[learnIndex].UserAnswers = userAnswers;
-            learnIndex += 1;
-            if (learnIndex == learns.Count)
+            // check which answers are correct and which ones dont
+            var answers = learn.Translations.Select(t =>
+                new AnswerDTO
+                {
+                    IdTranslate = t.IdTranslate,
+                    // check if it is answered
+                    IsCorrect = learn.UserAnswers.Any(ua => ua.IdTranslate == t.IdTranslate)
+                }).ToList();
+            
+            await ChangeWord(answers);
+        }
+
+        protected async Task Next()
+        {
+            // all corrects and have id translate setted
+            await ChangeWord(learn.UserAnswers);
+        }
+
+        protected async Task ChangeWord(List<AnswerDTO> answers)
+        {
+            userAnswers.AddRange(answers);
+            LoadNewWord();
+            await CheckIfSendAnswers();
+        }
+        #endregion
+
+        protected async Task CheckIfSendAnswers()
+        {
+            if (learns.Count <= Common.Constants.CONSTANTS.WORDS_TO_RETURN) 
             {
-                // send data to API
-            }
-            else
-            {
-                ShowWord();
+                var url = "Learn/SaveResultsGetNew";
+                var apiRequest = Request.BuildPost(url, userAnswers);
+                var response = await APIClient.Send<ListResult<LearnDTO>>(apiRequest);
+                if (response.Success)
+                {
+                    learns.AddRange(response.ResultOk);
+                }
+                else
+                {
+                    toastService.ShowError(response.ResultError.FriendlyErrorMessage);
+                }                
+                userAnswers = new List<AnswerDTO>();
             }
         }
 

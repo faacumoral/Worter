@@ -1,13 +1,8 @@
 ﻿using FMCW.Common.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Worter.BL.Shared;
-using Worter.Common;
-using Worter.Common.Constants;
 using Worter.DAO.Models;
 using Worter.DTO.Language;
 
@@ -47,65 +42,13 @@ namespace Worter.BL
             var translation = new Translation
             {
                 IdWordNavigation = word,
-                Translate = wordDto.TranslateMeaning
+                Translate = wordDto.TranslateMeaning,
+                Score = 0
             };
             context.Translation.Add(translation);
 
             context.SaveChanges();
             return IntResult.Ok(word.IdWord);
-        }
-
-        /// <summary>
-        /// returns 10 learns dto, 5 Word => Translations and 5 Translations => Word
-        /// </summary>
-        /// <param name="idLanguage"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public ListResult<LearnDTO> GetLearns(int idLanguage, int userId)
-        {
-            var wordsToReturn = CONSTANTS.WORDS_TO_RETURN;
-            var result = new List<LearnDTO>();
-            // check if its at least 5 words
-            var words = context
-                .Word
-                .Include(w => w.Translation)
-                .Where(w => w.IdLanguage == idLanguage && w.IdStudent == userId)
-                .AsNoTracking()
-                .ToList();
-
-            if (words.Count() < wordsToReturn)
-                return ListResult<LearnDTO>.Error($"You must add at least {wordsToReturn} words");
-
-            // TODO order by counter based on wrong or correct before answers
-            words.Shuffle();
-
-            // word to translations
-            foreach (var word in words.Take(wordsToReturn))
-            {
-                result.Add(new LearnDTO
-                {
-                    Word = word.Meaning,
-                    Translations = word.Translation
-                        .Select( t => t.Translate)
-                        .ToList(),
-                });
-            }
-
-            // translation to word
-            words.Shuffle();
-            var translations = words.SelectMany(w => w.Translation).ToList();
-            foreach (var t in translations.Take(wordsToReturn))
-            {
-                result.Add(new LearnDTO
-                {
-                    Word = t.Translate,
-                    Translations = new List<string> { t.IdWordNavigation.Meaning  }
-                });
-            }
-
-            // random order
-            result.Shuffle();
-            return ListResult<LearnDTO>.Ok(result);
         }
 
         public BoolResult DeleteTranslate(int idTranslate)
@@ -131,13 +74,14 @@ namespace Worter.BL
 
         public ListResult<TranslateDTO> Get(WordFilterDTO filters, int iduser)
         {
+            var filterValue = filters.Filter.ToUpper();
             // TODO replace acentos, umlauts and cases
             var words = context
                 .Word
                 .Where(
                     w => w.IdStudent == iduser &&
                     w.IdLanguage == filters.IdLanguage &&
-                    (w.Translation.Any(t => t.Translate.Contains(filters.Filter)) || w.Meaning.Contains(filters.Filter)))
+                    (w.Translation.Any(t => t.Translate.ToUpper().Contains(filterValue)) || w.Meaning.ToUpper().Contains(filterValue)))
                 .SelectMany(
                 w => w
                     .Translation

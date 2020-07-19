@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.Collections.Generic;
 using System.Linq;
 using Worter.API.Controllers.Shared;
 using Worter.BL;
@@ -30,18 +31,14 @@ namespace Worter.API.Controllers
         [HttpPost]
         public BoolResult DeleteTranslate([FromBody]int IdTranslate)
            => wordBl.DeleteTranslate(IdTranslate);
+
         #endregion
 
-        #region MyRegion
+        #region GET
         [Route("Get")]
         [HttpGet]
         public ListResult<TranslateDTO> Get([FromQuery]WordFilterDTO filters)
             => wordBl.Get(filters, UserId);
-
-        [Route("GetLearns")]
-        [HttpGet]
-        public ListResult<LearnDTO> GetLearns([FromQuery] int IdLanguage)
-            => wordBl.GetLearns(IdLanguage, UserId);
         #endregion
     }
 }

@@ -38,14 +38,14 @@
     else
     {
         <div class="row form-row">
-            <div class="col-4">
-                <input disabled="disabled" class="form-control" @bind="learns[learnIndex].Word"/>
+            <div class="col-lg-4 col-sm-12">
+                <input disabled="disabled" class="form-control" @bind="learn.Word"/>
             </div>
-            <div class="col-1" style="text-align:center;">
+            <div class="col-lg-1 col-sm-12" style="text-align:center;">
                 <h3>?</h3>
             </div>
-            <div class="col-6">
-                @foreach (var answer in userAnswers)
+            <div class="col-lg-6 col-sm-12">
+                @foreach (var answer in learn.UserAnswers)
                 {
                     <div class="row form-row">
                         <div class="col-11">
@@ -70,15 +70,14 @@
         </div>
         <div class="row form-row">
             <div class="col-10">
-                <button class="btn btn-warning" @onclick="Next">
+                <button class="btn btn-warning" @onclick="DontKnow">
                     Don't know!
                 </button>
-                <button class="btn btn-success pull-right" @onclick="Next" disabled="@userAnswers.All(a => !a.IsCorrect)">
-                    Next! &nbsp; <i class="fas fa-arrow-right"></i>
+                <button class="btn btn-success pull-right" @onclick="Next" disabled="@learn.UserAnswers.All(a => !a.IsCorrect)">
+                    Next ! &nbsp; <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </div>
-
-
+        @learns.Count
     }
 }

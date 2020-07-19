@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Worter.Common.Constants
+﻿namespace Worter.Common.Constants
 {
     public static partial class CONSTANTS
     {
-        public const int WORDS_TO_RETURN = 5;
+        public const int WORDS_TO_RETURN = 6;
+        public const int POINTS_CORRECT = 10;
+        public const int POINTS_WRONG = -10;
 
         public static class Keys
         {

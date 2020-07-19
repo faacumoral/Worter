@@ -41,5 +41,13 @@ namespace Worter.Common
                 list[n] = value;
             }
         }
+
+        public static T GetRandom<T>(this IList<T> list)
+        {
+            var randomIndex = rng.Next(list.Count);
+            var element = list[randomIndex];
+            list.RemoveAt(randomIndex);
+            return element;
+        }
     }
 }
