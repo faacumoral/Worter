@@ -1,4 +1,5 @@
-﻿using FMCW.Common.Results;
+﻿using FMCW.Common;
+using FMCW.Common.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -25,7 +26,8 @@ namespace Worter.BL
                 {
                     IdLanguage = wordDto.IdLanguage,
                     Meaning = wordDto.OriginalMeaning,
-                    IdStudent = userId
+                    IdStudent = userId,
+                    SearchValue = Helpers.GetSearchValue(wordDto.OriginalMeaning)
                 };
                 context.Word.Add(word);
             }
@@ -38,11 +40,12 @@ namespace Worter.BL
                     Success = true
                 };
             }
-            
+
             var translation = new Translation
             {
                 IdWordNavigation = word,
                 Translate = wordDto.TranslateMeaning,
+                SearchValue = Helpers.GetSearchValue(wordDto.TranslateMeaning),
                 Score = 0
             };
             context.Translation.Add(translation);
@@ -74,14 +77,14 @@ namespace Worter.BL
 
         public ListResult<TranslateDTO> Get(WordFilterDTO filters, int iduser)
         {
-            var filterValue = filters.Filter.ToUpper();
-            // TODO replace acentos, umlauts and cases
+            var filterValue = Helpers.GetSearchValue(filters.Filter);
+            
             var words = context
                 .Word
                 .Where(
                     w => w.IdStudent == iduser &&
                     w.IdLanguage == filters.IdLanguage &&
-                    (w.Translation.Any(t => t.Translate.ToUpper().Contains(filterValue)) || w.Meaning.ToUpper().Contains(filterValue)))
+                    (w.Translation.Any(t => t.SearchValue.Contains(filterValue)) || w.SearchValue.Contains(filterValue)))
                 .SelectMany(
                 w => w
                     .Translation

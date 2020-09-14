@@ -49,6 +49,8 @@ namespace Worter.DAO.Models
                 entity.HasKey(e => e.IdTranslation)
                     .HasName("PK__Translat__4DAFC6B3905B84ED");
 
+                entity.Property(e => e.SearchValue).IsUnicode(false);
+
                 entity.Property(e => e.Translate).IsUnicode(false);
 
                 entity.HasOne(d => d.IdWordNavigation)
@@ -64,6 +66,8 @@ namespace Worter.DAO.Models
                     .HasName("PK__Word__2E9FC62CBEC06D11");
 
                 entity.Property(e => e.Meaning).IsUnicode(false);
+
+                entity.Property(e => e.SearchValue).IsUnicode(false);
 
                 entity.HasOne(d => d.IdLanguageNavigation)
                     .WithMany(p => p.Word)

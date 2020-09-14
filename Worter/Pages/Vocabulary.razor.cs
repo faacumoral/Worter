@@ -106,9 +106,9 @@ namespace Worter.Pages
                 return;
             }
 
-            if (string.IsNullOrEmpty(filters.Filter) || filters.Filter.Length < 3)
+            if (string.IsNullOrEmpty(filters.Filter))
             {
-                toastService.ShowError("Type at least 3 chars before search");
+                toastService.ShowError("Type something!");
                 return;
             }
 
